@@ -1,0 +1,598 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockTrade Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+         :root {
+            --primary: #1a73e8;
+            --success: #0f9d58;
+            --danger: #db4437;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .login-body {
+            padding: 30px;
+        }
+        
+        .app-container {
+            display: none;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        .navbar-custom {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stock-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .stock-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .price-up {
+            color: var(--success);
+        }
+        
+        .price-down {
+            color: var(--danger);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: 300px;
+        }
+        
+        .portfolio-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn-trade {
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-buy {
+            background: var(--success);
+            color: white;
+            border: none;
+        }
+        
+        .btn-sell {
+            background: var(--danger);
+            color: white;
+            border: none;
+        }
+        
+        .watchlist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-custom .modal-content {
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Page -->
+<div id="loginPage" class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2 class="mb-0">📈 StockTrade Pro</h2>
+            <p class="mb-0 mt-2">Your Gateway to Smart Trading</p>
+        </div>
+        <div class="login-body">
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="loginEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 btn-trade">Login</button>
+                <p class="text-center mt-3 mb-0">Demo: user@demo.com / password</p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Main App -->
+<div id="appContainer" class="app-container">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">📈 StockTrade Pro</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('dashboard')">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('portfolio')">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('watchlist')">Watchlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" class="content-section">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="balance-card">
+                        <h5>Portfolio Balance</h5>
+                        <h2 id="portfolioBalance">$50,000.00</h2>
+                        <p class="mb-0">Available: <span id="availableBalance">$30,000.00</span></p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <h5>Market Overview</h5>
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h4 class="mb-3">Top Stocks</h4>
+                </div>
+                <div class="col-md-4" id="stocksContainer"></div>
+            </div>
+        </div>
+
+        <!-- Portfolio Section -->
+        <div id="portfolioSection" class="content-section" style="display:none;">
+            <h3 class="mb-4">My Portfolio</h3>
+            <div id="portfolioContainer"></div>
+        </div>
+
+        <!-- Watchlist Section -->
+        <div id="watchlistSection" class="content-section" style="display:none;">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 class="mb-4">Watchlist</h3>
+                    <div class="stock-card">
+                        <div id="watchlistContainer"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="mb-3">Add to Watchlist</h4>
+                    <div class="stock-card">
+                        <input type="text" class="form-control mb-2" id="watchlistSymbol" placeholder="Stock Symbol">
+                        <button class="btn btn-primary w-100" onclick="addToWatchlist()">Add Stock</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trade Modal -->
+<div class="modal fade modal-custom" id="tradeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tradeModalLabel">Trade Stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h4 id="tradeStockSymbol"></h4>
+                <p>Current Price: $<span id="tradeStockPrice"></span></p>
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="tradeQuantity" min="1" value="1">
+                </div>
+                <p>Total: $<span id="tradeTotal">0.00</span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-buy" onclick="executeTrade('buy')">Buy</button>
+                <button type="button" class="btn btn-sell" onclick="executeTrade('sell')">Sell</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    // User data stored in memory
+    let userData = {
+        balance: 30000,
+        portfolio: {},
+        watchlist: []
+    };
+
+    // Mock stock data
+    const stockData = [{
+        symbol: 'AAPL',
+        name: 'Apple Inc.',
+        price: 175.50,
+        change: 2.3
+    }, {
+        symbol: 'GOOGL',
+        name: 'Alphabet Inc.',
+        price: 142.20,
+        change: -1.2
+    }, {
+        symbol: 'MSFT',
+        name: 'Microsoft Corp.',
+        price: 378.90,
+        change: 3.5
+    }, {
+        symbol: 'AMZN',
+        name: 'Amazon.com',
+        price: 178.35,
+        change: 1.8
+    }, {
+        symbol: 'TSLA',
+        name: 'Tesla Inc.',
+        price: 248.50,
+        change: -2.1
+    }, {
+        symbol: 'META',
+        name: 'Meta Platforms',
+        price: 495.20,
+        change: 4.2
+    }];
+
+    let currentTradeStock = null;
+    let chartInterval = null;
+
+    // Login functionality
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        // Default credentials
+        const defaultEmail = 'user@demo.com';
+        const defaultPassword = 'password';
+
+        if (email === defaultEmail && password === defaultPassword) {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            initializeApp();
+        } else {
+            alert('Invalid credentials! Please use:\nEmail: user@demo.com\nPassword: password');
+        }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        document.getElementById('appContainer').style.display = 'none';
+        document.getElementById('loginPage').style.display = 'flex';
+        clearInterval(chartInterval);
+    });
+
+    function initializeApp() {
+        updateBalances();
+        renderStocks();
+        renderPortfolio();
+        renderWatchlist();
+        drawChart();
+        startPriceUpdates();
+    }
+
+    function updateBalances() {
+        const invested = Object.values(userData.portfolio).reduce((sum, item) =>
+            sum + (item.quantity * item.buyPrice), 0);
+        const total = userData.balance + invested;
+
+        document.getElementById('availableBalance').textContent =
+            `$${userData.balance.toFixed(2)}`;
+        document.getElementById('portfolioBalance').textContent =
+            `$${total.toFixed(2)}`;
+    }
+
+    function renderStocks() {
+        const container = document.getElementById('stocksContainer');
+        container.innerHTML = stockData.map(stock => `
+                <div class="stock-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h5 class="mb-1">${stock.symbol}</h5>
+                            <small class="text-muted">${stock.name}</small>
+                        </div>
+                        <button class="btn btn-sm btn-primary" onclick="openTradeModal('${stock.symbol}')">Trade</button>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-end">
+                        <h4 class="mb-0">$${stock.price.toFixed(2)}</h4>
+                        <span class="${stock.change >= 0 ? 'price-up' : 'price-down'}">
+                            ${stock.change >= 0 ? '▲' : '▼'} ${Math.abs(stock.change).toFixed(2)}%
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    function renderPortfolio() {
+        const container = document.getElementById('portfolioContainer');
+        const portfolioItems = Object.entries(userData.portfolio);
+
+        if (portfolioItems.length === 0) {
+            container.innerHTML = '<div class="stock-card"><p class="text-muted mb-0">No holdings yet. Start trading!</p></div>';
+            return;
+        }
+
+        container.innerHTML = portfolioItems.map(([symbol, data]) => {
+            const stock = stockData.find(s => s.symbol === symbol);
+            const currentValue = stock.price * data.quantity;
+            const profit = currentValue - (data.buyPrice * data.quantity);
+            const profitPercent = (profit / (data.buyPrice * data.quantity)) * 100;
+
+            return `
+                    <div class="portfolio-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <h5 class="mb-0">${symbol}</h5>
+                                <small class="text-muted">${data.quantity} shares</small>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">Buy Price</small>
+                                <p class="mb-0">$${data.buyPrice.toFixed(2)}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">Current Value</small>
+                                <p class="mb-0">$${currentValue.toFixed(2)}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">Profit/Loss</small>
+                                <p class="mb-0 ${profit >= 0 ? 'price-up' : 'price-down'}">
+                                    $${profit.toFixed(2)} (${profitPercent.toFixed(2)}%)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        }).join('');
+    }
+
+    function renderWatchlist() {
+        const container = document.getElementById('watchlistContainer');
+
+        if (userData.watchlist.length === 0) {
+            container.innerHTML = '<p class="text-muted">No stocks in watchlist</p>';
+            return;
+        }
+
+        container.innerHTML = userData.watchlist.map(symbol => {
+            const stock = stockData.find(s => s.symbol === symbol);
+            if (!stock) return '';
+
+            return `
+                    <div class="watchlist-item">
+                        <div>
+                            <strong>${stock.symbol}</strong>
+                            <small class="text-muted d-block">${stock.name}</small>
+                        </div>
+                        <div class="text-end">
+                            <strong>$${stock.price.toFixed(2)}</strong>
+                            <span class="d-block ${stock.change >= 0 ? 'price-up' : 'price-down'}">
+                                ${stock.change >= 0 ? '▲' : '▼'} ${Math.abs(stock.change).toFixed(2)}%
+                            </span>
+                        </div>
+                    </div>
+                `;
+        }).join('');
+    }
+
+    function addToWatchlist() {
+        const symbol = document.getElementById('watchlistSymbol').value.toUpperCase();
+        const stock = stockData.find(s => s.symbol === symbol);
+
+        if (!stock) {
+            alert('Stock symbol not found!');
+            return;
+        }
+
+        if (!userData.watchlist.includes(symbol)) {
+            userData.watchlist.push(symbol);
+            renderWatchlist();
+            document.getElementById('watchlistSymbol').value = '';
+        } else {
+            alert('Stock already in watchlist!');
+        }
+    }
+
+    function openTradeModal(symbol) {
+        const stock = stockData.find(s => s.symbol === symbol);
+        currentTradeStock = stock;
+
+        document.getElementById('tradeStockSymbol').textContent = stock.symbol;
+        document.getElementById('tradeStockPrice').textContent = stock.price.toFixed(2);
+        document.getElementById('tradeQuantity').value = 1;
+        updateTradeTotal();
+
+        const modal = new bootstrap.Modal(document.getElementById('tradeModal'));
+        modal.show();
+    }
+
+    document.getElementById('tradeQuantity').addEventListener('input', updateTradeTotal);
+
+    function updateTradeTotal() {
+        if (!currentTradeStock) return;
+        const quantity = parseInt(document.getElementById('tradeQuantity').value) || 0;
+        const total = currentTradeStock.price * quantity;
+        document.getElementById('tradeTotal').textContent = total.toFixed(2);
+    }
+
+    function executeTrade(type) {
+        const quantity = parseInt(document.getElementById('tradeQuantity').value);
+        const total = currentTradeStock.price * quantity;
+
+        if (type === 'buy') {
+            if (userData.balance < total) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            userData.balance -= total;
+
+            if (userData.portfolio[currentTradeStock.symbol]) {
+                const current = userData.portfolio[currentTradeStock.symbol];
+                const newQuantity = current.quantity + quantity;
+                const newAvgPrice = ((current.buyPrice * current.quantity) + total) / newQuantity;
+                userData.portfolio[currentTradeStock.symbol] = {
+                    quantity: newQuantity,
+                    buyPrice: newAvgPrice
+                };
+            } else {
+                userData.portfolio[currentTradeStock.symbol] = {
+                    quantity: quantity,
+                    buyPrice: currentTradeStock.price
+                };
+            }
+
+            alert(`Bought ${quantity} shares of ${currentTradeStock.symbol}`);
+        } else {
+            if (!userData.portfolio[currentTradeStock.symbol] ||
+                userData.portfolio[currentTradeStock.symbol].quantity < quantity) {
+                alert('Insufficient shares to sell!');
+                return;
+            }
+
+            userData.balance += total;
+            userData.portfolio[currentTradeStock.symbol].quantity -= quantity;
+
+            if (userData.portfolio[currentTradeStock.symbol].quantity === 0) {
+                delete userData.portfolio[currentTradeStock.symbol];
+            }
+
+            alert(`Sold ${quantity} shares of ${currentTradeStock.symbol}`);
+        }
+
+        updateBalances();
+        renderPortfolio();
+        bootstrap.Modal.getInstance(document.getElementById('tradeModal')).hide();
+    }
+
+    function drawChart() {
+        const canvas = document.getElementById('marketChart');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 300;
+
+        const data = Array(30).fill(0).map((_, i) =>
+            100 + Math.sin(i / 5) * 20 + Math.random() * 10);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.strokeStyle = '#667eea';
+        ctx.lineWidth = 3;
+
+        const xStep = canvas.width / (data.length - 1);
+        const yScale = canvas.height / 150;
+
+        data.forEach((value, i) => {
+            const x = i * xStep;
+            const y = canvas.height - (value * yScale);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+
+        ctx.stroke();
+    }
+
+    function startPriceUpdates() {
+        chartInterval = setInterval(() => {
+            stockData.forEach(stock => {
+                const change = (Math.random() - 0.5) * 5;
+                stock.price += change;
+                stock.change = change;
+            });
+
+            renderStocks();
+            renderPortfolio();
+            renderWatchlist();
+        }, 5000);
+    }
+
+    function showSection(section) {
+        document.querySelectorAll('.content-section').forEach(el => el.style.display = 'none');
+        document.getElementById(section + 'Section').style.display = 'block';
+    }
+</script>
+</body>
+
+</html> -->
