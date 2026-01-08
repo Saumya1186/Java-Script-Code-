@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillForge | Master the Future</title>
+
+    <!-- External Assets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Dependencies for Animations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+         :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --accent-color: #6366f1;
+            --bg-body: #f8fafc;
+            --text-main: #1e293b;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+        
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --text-main: #f1f5f9;
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+        }
+        /* --- UI Enhancements --- */
+        
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-gradient {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+            color: white;
+        }
+        /* --- Hero Section --- */
+        
+        .hero-section {
+            min-height: 100vh;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+            color: white;
+        }
+        
+        .typewriter {
+            font-weight: 700;
+            border-right: 3px solid #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3.5s steps(30, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from {
+                width: 0
+            }
+            to {
+                width: 100%
+            }
+        }
+        
+        @keyframes blink-caret {
+            from,
+            to {
+                border-color: transparent
+            }
+            50% {
+                border-color: white
+            }
+        }
+        /* --- Portfolio & Filter --- */
+        
+        .portfolio-item {
+            transition: 0.4s;
+            cursor: pointer;
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .filter-btn.active {
+            background: var(--accent-color);
+            color: white;
+        }
+        /* --- Dashboard Widget --- */
+        
+        .stats-badge {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin: 0 auto 10px;
+        }
+        /* --- Theme Customizer --- */
+        
+        .customizer {
+            position: fixed;
+            right: -200px;
+            top: 20%;
+            width: 200px;
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: 20px 0 0 20px;
+            z-index: 2000;
+            transition: 0.5s;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .customizer.active {
+            right: 0;
+        }
+        
+        .customizer-toggle {
+            position: absolute;
+            left: -40px;
+            background: var(--accent-color);
+            color: white;
+            padding: 10px;
+            border-radius: 10px 0 0 10px;
+            cursor: pointer;
+        }
+        /* --- Chatbot --- */
+        
+        #chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chat-window {
+            width: 300px;
+            height: 400px;
+            display: none;
+            flex-direction: column;
+        }
+        /* --- Scroll Progress --- */
+        
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: var(--primary-gradient);
+            z-index: 2100;
+            width: 0%;
+        }
+    </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#mainNav">
+
+    <div id="scroll-progress"></div>
+
+    <!-- Navigation -->
+    <nav id="mainNav" class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="#">Skill<span class="text-info">Forge</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link px-3" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#portfolio">Portfolio</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#courses">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#blog">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#contact">Contact</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <button class="btn btn-outline-light rounded-circle" id="dark-toggle">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Off-canvas Mobile Menu -->
+    <div class="offcanvas offcanvas-end bg-dark text-white" id="mobileMenu">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">SkillForge</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav fs-4">
+                <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                <li class="nav-item"><a class="nav-link" href="#courses">Courses</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-1 fw-bold mb-4 typewriter">Forge Your Future.</h1>
+            <p class="lead mb-5 opacity-75 fs-3">Expert-led courses in Web, Design, and AI.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#courses" class="btn btn-gradient btn-lg">Start Learning</a>
+                <button class="btn btn-outline-light btn-lg rounded-pill" data-bs-toggle="modal" data-bs-target="#statsModal">View Dashboard</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Preview -->
+    <section class="container mt-n5" style="margin-top: -50px;">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-card p-4 text-center">
+                    <div class="stats-badge"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 id="stat-courses">2</h3>
+                    <p class="text-muted">Courses Completed</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 text-center">
+                    <div class="stats-badge"><i class="fas fa-award"></i></div>
+                    <h3 id="stat-badges">1</h3>
+                    <p class="text-muted">Badges Earned</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 text-center">
+                    <div class="stats-badge"><i class="fas fa-fire"></i></div>
+                    <h3>12</h3>
+                    <p class="text-muted">Day Streak</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-5">
+        <div class="container py-5">
+            <h2 class="text-center mb-5 fw-bold display-4">Creative Showcase</h2>
+            <div class="d-flex justify-content-center gap-2 mb-5">
+                <button class="btn btn-sm btn-outline-secondary filter-btn active" onclick="filterProjects('all')">All</button>
+                <button class="btn btn-sm btn-outline-secondary filter-btn" onclick="filterProjects('web')">Web</button>
+                <button class="btn btn-sm btn-outline-secondary filter-btn" onclick="filterProjects('design')">Design</button>
+            </div>
+            <div class="row g-4" id="portfolioGrid">
+                <div class="col-md-4 portfolio-item" data-cat="web">
+                    <div class="glass-card overflow-hidden">
+                        <img src="https://picsum.photos/400/300?random=1" class="img-fluid" alt="Project">
+                        <div class="p-3">
+                            <h5>Neural Network UI</h5>
+                            <button class="btn btn-link p-0 text-accent" data-bs-toggle="modal" data-bs-target="#projModal">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 portfolio-item" data-cat="design">
+                    <div class="glass-card overflow-hidden">
+                        <img src="https://picsum.photos/400/300?random=2" class="img-fluid" alt="Project">
+                        <div class="p-3">
+                            <h5>Abstract Brand Kit</h5>
+                            <button class="btn btn-link p-0 text-accent" data-bs-toggle="modal" data-bs-target="#projModal">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 portfolio-item" data-cat="web">
+                    <div class="glass-card overflow-hidden">
+                        <img src="https://picsum.photos/400/300?random=3" class="img-fluid" alt="Project">
+                        <div class="p-3">
+                            <h5>E-Commerce 3.0</h5>
+                            <button class="btn btn-link p-0 text-accent" data-bs-toggle="modal" data-bs-target="#projModal">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="py-5 bg-dark text-white">
+        <div class="container">
+            <div class="row mb-5 align-items-center">
+                <div class="col-md-6">
+                    <h2 class="fw-bold display-4">Active Courses</h2>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Next Launch In:</p>
+                    <div id="countdown" class="fs-4 fw-bold text-info">00:00:00</div>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="glass-card p-4 h-100">
+                        <h4>Full Stack Masterclass</h4>
+                        <div class="progress my-4" style="height: 12px; background: rgba(255,255,255,0.1);">
+                            <div id="prog-1" class="progress-bar bg-info" style="width: 45%;"></div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-light" onclick="completeLesson('prog-1')">Mark Lesson Complete</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-card p-4 h-100">
+                        <h4>AI Implementation</h4>
+                        <div class="progress my-4" style="height: 12px; background: rgba(255,255,255,0.1);">
+                            <div id="prog-2" class="progress-bar bg-info" style="width: 80%;"></div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-light" onclick="completeLesson('prog-2')">Mark Lesson Complete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center mb-5">
+                    <h2 class="fw-bold">Let's Build Something Together</h2>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-card p-5">
+                        <form id="contactForm">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Message</label>
+                                <textarea class="form-control" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-gradient w-100">Send with Confetti!</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Widget -->
+    <div id="chatbot">
+        <div id="chatWindow" class="glass-card chat-window p-3 mb-3">
+            <div class="chat-header fw-bold border-bottom mb-2 pb-2">SkillForge Bot</div>
+            <div id="chatContent" class="flex-grow-1 overflow-auto mb-2 small">
+                <p class="bg-primary text-white p-2 rounded">Hello! How can I help you today?</p>
+            </div>
+            <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Ask about courses...">
+        </div>
+        <button onclick="toggleChat()" class="btn btn-primary rounded-circle shadow-lg" style="width: 60px; height: 60px;">
+            <i class="fas fa-comment-dots fs-3"></i>
+        </button>
+    </div>
+
+    <!-- Theme Customizer -->
+    <div class="customizer" id="customizer">
+        <div class="customizer-toggle" onclick="toggleCustomizer()"><i class="fas fa-cog fa-spin"></i></div>
+        <h6>Accent Color</h6>
+        <div class="d-flex gap-2 mb-3">
+            <div class="rounded-circle" style="width:25px; height:25px; background:#6366f1; cursor:pointer" onclick="setAccent('#6366f1')"></div>
+            <div class="rounded-circle" style="width:25px; height:25px; background:#10b981; cursor:pointer" onclick="setAccent('#10b981')"></div>
+            <div class="rounded-circle" style="width:25px; height:25px; background:#f59e0b; cursor:pointer" onclick="setAccent('#f59e0b')"></div>
+        </div>
+        <p class="small text-muted">Pick your vibe!</p>
+    </div>
+
+    <footer class="py-5 bg-dark text-white text-center">
+        <div class="social-links mb-4">
+            <a href="#" class="text-white mx-3 fs-4 hover-glow"><i class="fab fa-github"></i></a>
+            <a href="#" class="text-white mx-3 fs-4 hover-glow"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="text-white mx-3 fs-4 hover-glow"><i class="fab fa-twitter"></i></a>
+        </div>
+        <p>&copy; 2023 SkillForge. Design with ❤️ for Learners.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- 1. Dark Mode & Persistence ---
+        const darkToggle = document.getElementById('dark-toggle');
+        const body = document.body;
+
+        const loadTheme = () => {
+            const saved = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', saved);
+            darkToggle.innerHTML = saved === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        };
+
+        darkToggle.addEventListener('click', () => {
+            const current = body.getAttribute('data-theme');
+            const target = current === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', target);
+            localStorage.setItem('theme', target);
+            loadTheme();
+        });
+        loadTheme();
+
+        // --- 2. Scroll Progress Bar ---
+        window.onscroll = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scroll-progress").style.width = scrolled + "%";
+        };
+
+        // --- 3. Gamification: Course Completion ---
+        let badges = 1;
+
+        function completeLesson(id) {
+            const bar = document.getElementById(id);
+            let width = parseInt(bar.style.width);
+            if (width < 100) {
+                width += 10;
+                bar.style.width = width + '%';
+                if (width === 100) {
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: {
+                            y: 0.6
+                        }
+                    });
+                    badges++;
+                    document.getElementById('stat-badges').innerText = badges;
+                    alert("🏆 Course Completed! New Badge Earned.");
+                }
+            }
+        }
+
+        // --- 4. Portfolio Filter ---
+        function filterProjects(cat) {
+            const items = document.querySelectorAll('.portfolio-item');
+            items.forEach(item => {
+                if (cat === 'all' || item.getAttribute('data-cat') === cat) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // --- 5. Countdown Timer ---
+        const targetDate = new Date().getTime() + (3 * 24 * 60 * 60 * 1000); // 3 days from now
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('countdown').innerHTML = `${h}h ${m}m ${s}s`;
+        }, 1000);
+
+        // --- 6. Chatbot Toggle ---
+        function toggleChat() {
+            const chat = document.getElementById('chatWindow');
+            chat.style.display = chat.style.display === 'none' || chat.style.display === '' ? 'flex' : 'none';
+        }
+
+        // --- 7. Theme Customizer ---
+        function toggleCustomizer() {
+            document.getElementById('customizer').classList.toggle('active');
+        }
+
+        function setAccent(color) {
+            document.documentElement.style.setProperty('--accent-color', color);
+        }
+
+        // --- 8. Contact Form Success ---
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: {
+                    y: 0.6
+                }
+            });
+            alert("Message Sent Successfully!");
+            e.target.reset();
+        });
+    </script>
+</body>
+
+</html>
