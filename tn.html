@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TravelNest - Your gateway to discovering amazing destinations around the world and Incredible India">
+    <title>TravelNest | Explore India & The World</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+         :root {
+            --primary-color: #2c5f7d;
+            --secondary-color: #ff6b6b;
+            --accent-color: #ffa62b;
+            --india-orange: #FF9933;
+            --india-green: #138808;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+        /* Navbar Enhancements */
+        
+        .navbar {
+            background: var(--primary-color);
+            transition: 0.3s;
+        }
+        
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(44, 95, 125, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        /* Hero Styling */
+        
+        .carousel-item {
+            height: 70vh;
+        }
+        
+        .carousel-caption h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        /* Destination Tabs */
+        
+        .nav-tabs-custom {
+            border: none;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .nav-tabs-custom .nav-link {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: 700;
+        }
+        
+        .nav-tabs-custom .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        /* Destination Cards */
+        
+        .dest-card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: 0.4s;
+            background: white;
+        }
+        
+        .dest-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dest-img-wrapper {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .dest-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+        
+        .dest-card:hover .dest-img-wrapper img {
+            transform: scale(1.1);
+        }
+        
+        .culture-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        
+        .specialty-tag {
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        /* Weather Widget */
+        
+        .weather-section {
+            background: #f0f4f7;
+            padding: 60px 0;
+            border-radius: 50px 50px 0 0;
+        }
+        
+        .weather-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        /* Section Titles */
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-weight: 800;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            width: 50%;
+            height: 4px;
+            background: var(--secondary-color);
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+        }
+        /* India Flag Gradient Decor */
+        
+        .india-accent {
+            border-top: 5px solid var(--india-orange);
+        }
+        
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 50px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-globe-americas text-warning"></i> TravelNest</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#destinations">Destinations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#weather">Live Weather</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-warning text-dark fw-bold ms-lg-3 px-4 rounded-pill" href="#contact">Book Now</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel -->
+    <header id="home">
+        <div id="mainHero" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://images.unsplash.com/photo-1524492749449-1d39593c8f1a?w=1600" class="d-block w-100" alt="India Taj Mahal">
+                    <div class="carousel-caption d-none d-md-block">
+                        <span class="badge bg-warning mb-2">Domestic Wonder</span>
+                        <h2>Incredible India</h2>
+                        <p>Explore the land of diversities, traditions, and colors.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600" class="d-block w-100" alt="Kyoto">
+                    <div class="carousel-caption d-none d-md-block">
+                        <span class="badge bg-info mb-2">International Escape</span>
+                        <h2>Global Wonders</h2>
+                        <p>Traverse across continents to witness nature's finest masterpieces.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Destinations Section -->
+    <section id="destinations" class="container py-5">
+        <div class="section-title">
+            <h2>Choose Your Nest</h2>
+            <p class="text-muted">Explore by Region</p>
+        </div>
+
+        <ul class="nav nav-tabs nav-tabs-custom" id="destTab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#domestic">Incredible India</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#international">International</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="destTabContent">
+            <!-- Domestic India -->
+            <div class="tab-pane fade show active" id="domestic">
+                <div class="row g-4" id="india-grid">
+                    <!-- JS Injected Cards for India -->
+                </div>
+            </div>
+
+            <!-- International -->
+            <div class="tab-pane fade" id="international">
+                <div class="row g-4" id="world-grid">
+                    <!-- JS Injected Cards for World -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weather Widget -->
+    <section id="weather" class="weather-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-5">
+                    <h2 class="fw-bold mb-4">Live Weather <br><span class="text-primary">Station</span></h2>
+                    <p class="text-muted mb-4">Plan your trip according to real-time climate data of your chosen destination.</p>
+                    <select class="form-select form-select-lg mb-4 rounded-pill" id="weatherSelect">
+                        <option value="">Select Destination...</option>
+                        <optgroup label="India (Domestic)">
+                            <option value="jaipur">Jaipur, Rajasthan</option>
+                            <option value="kochi">Kochi, Kerala</option>
+                            <option value="mumbai">Mumbai, Maharashtra</option>
+                            <option value="shimla">Shimla, Himachal</option>
+                        </optgroup>
+                        <optgroup label="International">
+                            <option value="paris">Paris, France</option>
+                            <option value="tokyo">Tokyo, Japan</option>
+                            <option value="dubai">Dubai, UAE</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <div id="weatherResult" class="weather-card" style="display: none;">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3 id="w-city" class="mb-0">Jaipur</h3>
+                                <p id="w-desc" class="opacity-75">Sunny Day</p>
+                            </div>
+                            <div class="text-end">
+                                <h1 id="w-temp" class="display-3 fw-bold mb-0">32°C</h1>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <i class="fas fa-wind mb-2"></i>
+                                <p class="small mb-0">Wind</p>
+                                <span id="w-wind">12km/h</span>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-tint mb-2"></i>
+                                <p class="small mb-0">Humidity</p>
+                                <span id="w-hum">40%</span>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-sun mb-2"></i>
+                                <p class="small mb-0">UV Index</p>
+                                <span>High</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detail Modal -->
+    <div class="modal fade" id="destModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0">
+                <div class="modal-header border-0 bg-light">
+                    <h5 class="modal-title fw-bold" id="modalTitle">Destination Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p id="modalDesc"></p>
+                    <div class="p-3 bg-light rounded-3">
+                        <p><strong><i class="fas fa-utensils text-danger me-2"></i>Specialty:</strong> <span id="modalSpec"></span></p>
+                        <p><strong><i class="fas fa-theater-masks text-primary me-2"></i>Culture:</strong> <span id="modalCult"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container text-center">
+            <div class="mb-4">
+                <i class="fab fa-facebook fa-2x mx-3"></i>
+                <i class="fab fa-instagram fa-2x mx-3"></i>
+                <i class="fab fa-twitter fa-2x mx-3"></i>
+            </div>
+            <p>&copy; 2026 TravelNest. Exploring Incredible India & Beyond.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const indiaData = [{
+            name: "Rajasthan",
+            img: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600",
+            culture: "Ghoomar Dance & Folk Music",
+            specialty: "Dal Baati Churma & Royal Palaces",
+            desc: "The Land of Kings, Rajasthan is known for its majestic forts, vibrant bazaars, and deep-rooted royal heritage."
+        }, {
+            name: "Kerala",
+            img: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600",
+            culture: "Kathakali & Vallam Kali",
+            specialty: "Backwaters & Spices",
+            desc: "God's Own Country offers serene backwaters, lush greenery, and the traditional Ayurvedic wellness culture."
+        }, {
+            name: "Punjab",
+            img: "https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=600",
+            culture: "Bhangra & Gidda",
+            specialty: "Golden Temple & Makki di Roti",
+            desc: "The heartbeat of India, Punjab is famous for its hospitality, the Golden Temple, and high-energy celebrations."
+        }, {
+            name: "Tamil Nadu",
+            img: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600",
+            culture: "Bharatanatyam & Temples",
+            specialty: "Kanchipuram Silk & Dosa",
+            desc: "A land of ancient Dravidian architecture and classical arts that have survived millennia."
+        }];
+
+        const worldData = [{
+            name: "Japan",
+            img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600",
+            culture: "Tea Ceremony & Anime",
+            specialty: "Sushi & Cherry Blossoms",
+            desc: "A perfect blend of futuristic technology and ancient Shinto traditions."
+        }, {
+            name: "Italy",
+            img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=600",
+            culture: "Renaissance Art & Opera",
+            specialty: "Pizza, Pasta & Fashion",
+            desc: "Home to the Roman Empire and the birthplace of the Renaissance."
+        }];
+
+        const weatherData = {
+            jaipur: {
+                city: "Jaipur, Rajasthan",
+                temp: "34°C",
+                desc: "Dry Sunny",
+                wind: "10km/h",
+                hum: "20%"
+            },
+            kochi: {
+                city: "Kochi, Kerala",
+                temp: "29°C",
+                desc: "Humid & Cloudy",
+                wind: "15km/h",
+                hum: "80%"
+            },
+            paris: {
+                city: "Paris, France",
+                temp: "14°C",
+                desc: "Light Rain",
+                wind: "20km/h",
+                hum: "60%"
+            },
+            tokyo: {
+                city: "Tokyo, Japan",
+                temp: "18°C",
+                desc: "Clear Sky",
+                wind: "5km/h",
+                hum: "40%"
+            }
+        };
+
+        // Render Cards
+        function renderCards(data, elementId) {
+            const container = document.getElementById(elementId);
+            data.forEach(item => {
+                const card = `
+                    <div class="col-md-6 col-lg-3">
+                        <div class="dest-card" onclick="openDetails('${item.name}')">
+                            <div class="dest-img-wrapper">
+                                <span class="culture-badge">${item.culture.split('&')[0]}</span>
+                                <img src="${item.img}" alt="${item.name}">
+                            </div>
+                            <div class="p-4">
+                                <span class="specialty-tag"><i class="fas fa-star me-1"></i> ${item.specialty.split('&')[0]}</span>
+                                <h4 class="fw-bold">${item.name}</h4>
+                                <p class="text-muted small">${item.desc.substring(0, 60)}...</p>
+                                <button class="btn btn-sm btn-outline-primary rounded-pill">Explore Culture</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        renderCards(indiaData, 'india-grid');
+        renderCards(worldData, 'world-grid');
+
+        // Modal Logic
+        function openDetails(name) {
+            const allData = [...indiaData, ...worldData];
+            const item = allData.find(d => d.name === name);
+            document.getElementById('modalTitle').innerText = item.name;
+            document.getElementById('modalDesc').innerText = item.desc;
+            document.getElementById('modalSpec').innerText = item.specialty;
+            document.getElementById('modalCult').innerText = item.culture;
+            new bootstrap.Modal(document.getElementById('destModal')).show();
+        }
+
+        // Weather Logic
+        document.getElementById('weatherSelect').addEventListener('change', function() {
+            const key = this.value;
+            if (key && weatherData[key]) {
+                const d = weatherData[key];
+                document.getElementById('w-city').innerText = d.city;
+                document.getElementById('w-temp').innerText = d.temp;
+                document.getElementById('w-desc').innerText = d.desc;
+                document.getElementById('w-wind').innerText = d.wind;
+                document.getElementById('w-hum').innerText = d.hum;
+                document.getElementById('weatherResult').style.display = 'block';
+            } else {
+                document.getElementById('weatherResult').style.display = 'none';
+            }
+        });
+
+        // Navbar Scroll
+        window.onscroll = function() {
+            if (window.pageYOffset > 50) document.querySelector('.navbar').classList.add('scrolled');
+            else document.querySelector('.navbar').classList.remove('scrolled');
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TravelNest - Your gateway to discovering amazing destinations around the world">
+    <title>TravelNest - Explore the World</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+         :root {
+            --primary-color: #2c5f7d;
+            --secondary-color: #ff6b6b;
+            --accent-color: #ffa62b;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        /* Navbar Styles */
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a4a5e 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .navbar-brand i {
+            color: var(--accent-color);
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            margin: 0 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after {
+            width: 80%;
+        }
+        /* Carousel Styles */
+        
+        .carousel-item {
+            height: 600px;
+            position: relative;
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .carousel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+        }
+        
+        .carousel-caption {
+            bottom: 30%;
+            z-index: 10;
+        }
+        
+        .carousel-caption h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1rem;
+        }
+        
+        .carousel-caption p {
+            font-size: 1.3rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        /* Weather Widget */
+        
+        .weather-widget {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 3rem 0;
+        }
+        
+        .weather-widget h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .weather-select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: none;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .weather-display {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .weather-display.active {
+            display: block;
+        }
+        
+        .weather-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .weather-temp {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        
+        .weather-icon {
+            font-size: 4rem;
+        }
+        
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .weather-detail {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        /* Blog Cards */
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent-color);
+        }
+        
+        .blog-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .blog-card img {
+            height: 250px;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+        
+        .blog-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .blog-card-body {
+            padding: 1.5rem;
+        }
+        
+        .blog-category {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .blog-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+        
+        .blog-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .blog-excerpt {
+            color: #555;
+            line-height: 1.8;
+        }
+        /* Newsletter Section */
+        
+        .newsletter {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #ee5a6f 100%);
+            padding: 4rem 0;
+            color: white;
+            margin-top: 5rem;
+        }
+        
+        .newsletter h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        
+        .newsletter-form button {
+            padding: 1rem 2rem;
+            background: var(--dark-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-form button:hover {
+            background: var(--primary-color);
+            transform: scale(1.05);
+        }
+        /* Footer */
+        
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: var(--accent-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .carousel-item {
+                height: 400px;
+            }
+            .carousel-caption h2 {
+                font-size: 2rem;
+            }
+            .carousel-caption p {
+                font-size: 1rem;
+            }
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-plane-departure"></i> TravelNest
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#destinations">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#blog">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#weather">Weather</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel -->
+    <section id="home">
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1600&h=900&fit=crop" alt="Paris">
+                    <div class="carousel-overlay"></div>
+                    <div class="carousel-caption">
+                        <h2>Discover Paris</h2>
+                        <p>The City of Light awaits with its timeless charm and romance</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop" alt="Mountains">
+                    <div class="carousel-overlay"></div>
+                    <div class="carousel-caption">
+                        <h2>Mountain Adventures</h2>
+                        <p>Experience breathtaking peaks and pristine wilderness</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1600&h=900&fit=crop" alt="Beach">
+                    <div class="carousel-overlay"></div>
+                    <div class="carousel-caption">
+                        <h2>Tropical Paradise</h2>
+                        <p>Relax on pristine beaches with crystal-clear waters</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Weather Widget -->
+    <section id="weather" class="container">
+        <div class="weather-widget">
+            <h3><i class="fas fa-cloud-sun"></i> Destination Weather</h3>
+            <select class="weather-select" id="destinationSelect">
+                <option value="">Select a destination</option>
+                <option value="paris">Paris, France</option>
+                <option value="tokyo">Tokyo, Japan</option>
+                <option value="bali">Bali, Indonesia</option>
+                <option value="newyork">New York, USA</option>
+                <option value="dubai">Dubai, UAE</option>
+            </select>
+            <div class="weather-display" id="weatherDisplay">
+                <div class="weather-info">
+                    <div>
+                        <h4 id="cityName">Paris</h4>
+                        <p id="weatherDesc">Partly Cloudy</p>
+                    </div>
+                    <div class="weather-temp" id="temperature">22°C</div>
+                    <div class="weather-icon" id="weatherIcon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <div class="weather-detail">
+                        <i class="fas fa-wind"></i>
+                        <p>Wind</p>
+                        <p id="windSpeed">12 km/h</p>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-tint"></i>
+                        <p>Humidity</p>
+                        <p id="humidity">65%</p>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-eye"></i>
+                        <p>Visibility</p>
+                        <p id="visibility">10 km</p>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-temperature-high"></i>
+                        <p>Feels Like</p>
+                        <p id="feelsLike">20°C</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="container my-5">
+        <h2 class="section-title">Latest Travel Stories</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card blog-card">
+                    <img src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&h=600&fit=crop" alt="Tokyo Streets">
+                    <div class="blog-card-body">
+                        <span class="blog-category">Asia</span>
+                        <h3 class="blog-title">24 Hours in Tokyo: A Whirlwind Adventure</h3>
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Dec 15, 2025</span>
+                            <span><i class="far fa-clock"></i> 8 min read</span>
+                        </div>
+                        <p class="blog-excerpt">Experience the perfect blend of traditional culture and futuristic innovation in Japan's bustling capital city.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card blog-card">
+                    <img src="https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800&h=600&fit=crop" alt="Santorini">
+                    <div class="blog-card-body">
+                        <span class="blog-category">Europe</span>
+                        <h3 class="blog-title">Sunset Magic in Santorini</h3>
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Dec 10, 2025</span>
+                            <span><i class="far fa-clock"></i> 6 min read</span>
+                        </div>
+                        <p class="blog-excerpt">Discover the enchanting white-washed buildings and blue domes that make Santorini a photographer's paradise.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card blog-card">
+                    <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=800&h=600&fit=crop" alt="Iceland">
+                    <div class="blog-card-body">
+                        <span class="blog-category">Adventure</span>
+                        <h3 class="blog-title">Chasing Northern Lights in Iceland</h3>
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Dec 5, 2025</span>
+                            <span><i class="far fa-clock"></i> 10 min read</span>
+                        </div>
+                        <p class="blog-excerpt">A complete guide to witnessing one of nature's most spectacular phenomena in the land of fire and ice.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card blog-card">
+                    <img src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=800&h=600&fit=crop" alt="Safari">
+                    <div class="blog-card-body">
+                        <span class="blog-category">Wildlife</span>
+                        <h3 class="blog-title">African Safari: An Unforgettable Journey</h3>
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Nov 28, 2025</span>
+                            <span><i class="far fa-clock"></i> 12 min read</span>
+                        </div>
+                        <p class="blog-excerpt">Get up close with majestic wildlife and experience the raw beauty of the African savanna.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card blog-card">
+                    <img src="https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&h=600&fit=crop" alt="Machu Picchu">
+                    <div class="blog-card-body">
+                        <span class="blog-category">History</span>
+                        <h3 class="blog-title">Trekking to Machu Picchu</h3>
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Nov 22, 2025</span>
+                            <span><i class="far fa-clock"></i> 9 min read</span>
+                        </div>
+                        <p class="blog-excerpt">Follow the ancient Inca Trail to one of the world's most iconic archaeological wonders.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card blog-card">
+                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop" alt="Beach Paradise">
+                    <div class="blog-card-body">
+                        <span class="blog-category">Beach</span>
+                        <h3 class="blog-title">Hidden Beaches of Thailand</h3>
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Nov 18, 2025</span>
+                            <span><i class="far fa-clock"></i> 7 min read</span>
+                        </div>
+                        <p class="blog-excerpt">Escape the crowds and discover secluded tropical paradises along Thailand's stunning coastline.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container text-center">
+            <h3>Never Miss an Adventure</h3>
+            <p>Subscribe to get our latest travel stories and tips delivered to your inbox</p>
+            <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit"><i class="fas fa-paper-plane"></i> Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About TravelNest</h4>
+                    <p>Your trusted companion for discovering the world's most amazing destinations. We share authentic travel experiences and insider tips to make your journey unforgettable.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#destinations">Destinations</a></li>
+                        <li><a href="#blog">Travel Blog</a></li>
+                        <li><a href="#weather">Weather Info</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#">Adventure Travel</a></li>
+                        <li><a href="#">Beach Destinations</a></li>
+                        <li><a href="#">City Guides</a></li>
+                        <li><a href="#">Budget Travel</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 TravelNest. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--secondary-color);"></i> for travelers</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Weather data (simulated API response)
+        const weatherData = {
+            paris: {
+                city: 'Paris, France',
+                temp: 15,
+                feelsLike: 13,
+                description: 'Partly Cloudy',
+                icon: 'fa-cloud-sun',
+                wind: 12,
+                humidity: 65,
+                visibility: 10
+            },
+            tokyo: {
+                city: 'Tokyo, Japan',
+                temp: 18,
+                feelsLike: 17,
+                description: 'Clear Sky',
+                icon: 'fa-sun',
+                wind: 8,
+                humidity: 55,
+                visibility: 15
+            },
+            bali: {
+                city: 'Bali, Indonesia',
+                temp: 28,
+                feelsLike: 31,
+                description: 'Tropical Storm',
+                icon: 'fa-cloud-showers-heavy',
+                wind: 25,
+                humidity: 85,
+                visibility: 5
+            },
+            newyork: {
+                city: 'New York, USA',
+                temp: 8,
+                feelsLike: 5,
+                description: 'Light Snow',
+                icon: 'fa-snowflake',
+                wind: 15,
+                humidity: 70,
+                visibility: 8
+            },
+            dubai: {
+                city: 'Dubai, UAE',
+                temp: 32,
+                feelsLike: 35,
+                description: 'Sunny',
+                icon: 'fa-sun',
+                wind: 10,
+                humidity: 45,
+                visibility: 20
+            }
+        };
+
+        // Weather widget functionality
+        const destinationSelect = document.getElementById('destinationSelect');
+        const weatherDisplay = document.getElementById('weatherDisplay');
+
+        destinationSelect.addEventListener('change', function() {
+            const destination = this.value;
+
+            if (destination && weatherData[destination]) {
+                const data = weatherData[destination];
+
+                document.getElementById('cityName').textContent = data.city;
+                document.getElementById('weatherDesc').textContent = data.description;
+                document.getElementById('temperature').textContent = data.temp + '°C';
+                document.getElementById('feelsLike').textContent = data.feelsLike + '°C';
+                document.getElementById('windSpeed').textContent = data.wind + ' km/h';
+                document.getElementById('humidity').textContent = data.humidity + '%';
+                document.getElementById('visibility').textContent = data.visibility + ' km';
+
+                const iconElement = document.getElementById('weatherIcon');
+                iconElement.innerHTML = `<i class="fas ${data.icon}"></i>`;
+
+                weatherDisplay.classList.add('active');
+            } else {
+                weatherDisplay.classList.remove('active');
+            }
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.offsetTop - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Newsletter form handler
+        function handleNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            alert(`Thank you for subscribing! We'll send our travel updates to ${email}`);
+            event.target.reset();
+        }
+
+        // Blog card click animation
+        document.querySelectorAll('.blog-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.blog-title').textContent;
+                alert(`Opening: ${title}\n\nThis would navigate to the full blog post in a production environment.`);
+            });
+        });
+
+        // Auto-play carousel with pause on hover
+        const carousel = document.getElementById('heroCarousel');
+        const bsCarousel = new bootstrap.Carousel(carousel, {
+            interval: 5000,
+            ride: 'carousel'
+        });
+
+        carousel.addEventListener('mouseenter', function() {
+            bsCarousel.pause();
+        });
+
+        carousel.addEventListener('mouseleave', function() {
+            bsCarousel.cycle();
+        });
+
+        // Lazy loading animation for blog cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.blog-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Add loading state to weather widget
+        let weatherTimeout;
+        destinationSelect.addEventListener('change', function() {
+            const destination = this.value;
+
+            if (destination && weatherData[destination]) {
+                // Show loading state
+                weatherDisplay.style.opacity = '0.5';
+
+                clearTimeout(weatherTimeout);
+                weatherTimeout = setTimeout(function() {
+                    const data = weatherData[destination];
+
+                    document.getElementById('cityName').textContent = data.city;
+                    document.getElementById('weatherDesc').textContent = data.description;
+                    document.getElementById('temperature').textContent = data.temp + '°C';
+                    document.getElementById('feelsLike').textContent = data.feelsLike + '°C';
+                    document.getElementById('windSpeed').textContent = data.wind + ' km/h';
+                    document.getElementById('humidity').textContent = data.humidity + '%';
+                    document.getElementById('visibility').textContent = data.visibility + ' km';
+
+                    const iconElement = document.getElementById('weatherIcon');
+                    iconElement.innerHTML = `<i class="fas ${data.icon}"></i>`;
+
+                    weatherDisplay.classList.add('active');
+                    weatherDisplay.style.opacity = '1';
+                }, 500);
+            } else {
+                weatherDisplay.classList.remove('active');
+            }
+        });
+
+        // Mobile menu close on link click
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                const navCollapse = document.getElementById('navbarNav');
+                const bsCollapse = bootstrap.Collapse.getInstance(navCollapse);
+                if (bsCollapse) {
+                    bsCollapse.hide();
+                }
+            });
+        });
+
+        // Add active state to navigation based on scroll position
+        window.addEventListener('scroll', function() {
+            let current = '';
+            const sections = document.querySelectorAll('section[id]');
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Console welcome message
+        console.log('%c🌍 Welcome to TravelNest! ', 'background: #2c5f7d; color: white; font-size: 20px; padding: 10px;');
+        console.log('%cExplore the world with us!', 'color: #ff6b6b; font-size: 14px;');
+    </script>
