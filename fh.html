@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodieHub | High-Protein Veg Revolution</title>
+
+    <!-- UI Frameworks -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+         :root {
+            --health-green: #00ff88;
+            --deep-forest: #0a2e1f;
+            --protein-orange: #ff6b00;
+            --glass: rgba(255, 255, 255, 0.1);
+            --neon-glow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            backdrop-filter: blur(15px);
+            background: rgba(10, 46, 31, 0.8);
+            border-bottom: 1px solid var(--health-green);
+        }
+        /* --- Hero Section --- */
+        
+        .hero-health {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&q=80&w=2070');
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            text-align: left;
+        }
+        
+        .protein-badge {
+            background: var(--protein-orange);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+        }
+        /* --- Glassmorphism Cards --- */
+        
+        .recipe-card {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--health-green);
+            box-shadow: var(--neon-glow);
+        }
+        
+        .card-img-container {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .macro-tag {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            color: var(--health-green);
+        }
+        /* --- Chatbot UI --- */
+        
+        #ai-bot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .bot-window {
+            width: 350px;
+            height: 450px;
+            background: #111;
+            border: 1px solid var(--health-green);
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8);
+        }
+        
+        .chat-msg {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .bot-msg {
+            background: var(--glass);
+            align-self: flex-start;
+        }
+        
+        .user-msg {
+            background: var(--health-green);
+            color: #000;
+            align-self: flex-end;
+        }
+        /* --- Custom Scrollbar --- */
+        
+         ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: var(--health-green);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Nav -->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="#"><i class="fas fa-leaf text-success"></i> Foodie<span class="text-success">Hub</span></a>
+            <div class="d-flex gap-3">
+                <span class="d-none d-md-inline text-light opacity-50"><i class="fas fa-user-md me-1"></i> Dietician Verified</span>
+                <button class="btn btn-outline-success rounded-pill" onclick="triggerConfetti()">Join Challenge</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero-health">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
+                    <h1 class="display-1 fw-black mb-4">FUEL YOUR <span class="text-success">MUSCLES</span> WITH PLANTS.</h1>
+                    <p class="lead fs-3 mb-5">Professional vegetarian meal plans. <br>Minimum <span class="text-warning">25g Protein</span> per serving. Zero meat. Zero excuses.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#recipes" class="btn btn-success btn-lg px-5 py-3 rounded-pill fw-bold">Explore 20+ Recipes</a>
+                        <button class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill" onclick="toggleBot()">Ask Dietician AI</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dietician Stats -->
+    <div class="container my-n5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="recipe-card p-4 text-center">
+                    <h2 class="text-success">20+</h2>
+                    <p class="mb-0">High-Protein Dishes</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="recipe-card p-4 text-center">
+                    <h2 class="text-success">100%</h2>
+                    <p class="mb-0">Pure Vegetarian</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="recipe-card p-4 text-center">
+                    <h2 class="text-success">AI</h2>
+                    <p class="mb-0">Smart Macro Tracking</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Recipes Grid -->
+    <section id="recipes" class="container py-5 mt-5">
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold">The Protein <span class="text-success">Power Grid</span></h2>
+            <p class="text-muted">Filtered for Maximum Hypertrophy & Fat Loss</p>
+        </div>
+
+        <div class="row g-4" id="recipeContainer">
+            <!-- JS Injection of 20+ Recipes -->
+        </div>
+    </section>
+
+    <!-- AI Chatbot -->
+    <div id="ai-bot-container">
+        <div class="bot-window" id="botWindow">
+            <div class="p-3 border-bottom border-success d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-success"><i class="fas fa-robot me-2"></i>Dietician AI</span>
+                <button class="btn-close btn-close-white" onclick="toggleBot()"></button>
+            </div>
+            <div id="chatContent" class="flex-grow-1 p-3 overflow-auto d-flex flex-column">
+                <div class="chat-msg bot-msg">Hello! I am your AI Dietician. Ask me about your protein goals or recipe substitutions!</div>
+            </div>
+            <div class="p-3 border-top border-secondary">
+                <div class="input-group">
+                    <input type="text" id="chatInput" class="form-control bg-dark text-white border-secondary" placeholder="Type message...">
+                    <button class="btn btn-success" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-success rounded-circle shadow-lg p-3" onclick="toggleBot()" style="width: 70px; height: 70px;">
+            <i class="fas fa-comment-medical fs-2"></i>
+        </button>
+    </div>
+
+    <footer class="py-5 text-center border-top border-secondary mt-5">
+        <p class="text-muted">&copy; 2026 FoodieHub Pro | Developed by Senior Fullstack Dietician Team</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // --- RECIPE DATABASE (20+ Items) ---
+        const recipes = [{
+            name: "Soya Chunk Keema",
+            protein: "28g",
+            img: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=500",
+            cal: 350
+        }, {
+            name: "Paneer Tikka Salad",
+            protein: "24g",
+            img: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=500",
+            cal: 400
+        }, {
+            name: "Tofu Stir Fry",
+            protein: "22g",
+            img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500",
+            cal: 320
+        }, {
+            name: "Tempeh Tacos",
+            protein: "25g",
+            img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
+            cal: 380
+        }, {
+            name: "Chickpea Power Bowl",
+            protein: "21g",
+            img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500",
+            cal: 420
+        }, {
+            name: "Seitan Roast",
+            protein: "30g",
+            img: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500",
+            cal: 450
+        }, {
+            name: "Greek Yogurt Parfait",
+            protein: "23g",
+            img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500",
+            cal: 290
+        }, {
+            name: "Lentil Pasta Pasta",
+            protein: "26g",
+            img: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?w=500",
+            cal: 410
+        }, {
+            name: "Moong Dal Chilla",
+            protein: "20g",
+            img: "https://images.unsplash.com/photo-1626074353765-517a681e40be?w=500",
+            cal: 300
+        }, {
+            name: "Edamame Quinoa",
+            protein: "22g",
+            img: "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?w=500",
+            cal: 340
+        }, {
+            name: "Soya Biryani",
+            protein: "27g",
+            img: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=500",
+            cal: 450
+        }, {
+            name: "Peanut Satay Tofu",
+            protein: "24g",
+            img: "https://images.unsplash.com/photo-1598514983318-2f64f8f4796c?w=500",
+            cal: 390
+        }, {
+            name: "Hemp Seed Salad",
+            protein: "21g",
+            img: "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?w=500",
+            cal: 310
+        }, {
+            name: "Skyr High Protein Bowl",
+            protein: "29g",
+            img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500",
+            cal: 330
+        }, {
+            name: "Pumpkin Seed Tofu",
+            protein: "25g",
+            img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500",
+            cal: 400
+        }, {
+            name: "Black Bean Burrito",
+            protein: "22g",
+            img: "https://images.unsplash.com/photo-1584031036380-3fb6f2d51880?w=500",
+            cal: 460
+        }, {
+            name: "Red Lentil Dahl",
+            protein: "20g",
+            img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500",
+            cal: 350
+        }, {
+            name: "Cottage Cheese Scramble",
+            protein: "26g",
+            img: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=500",
+            cal: 320
+        }, {
+            name: "Almond Crusted Tofu",
+            protein: "23g",
+            img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500",
+            cal: 380
+        }, {
+            name: "Sprouted Moong Salad",
+            protein: "21g",
+            img: "https://images.unsplash.com/photo-1505575967455-40e256f73376?w=500",
+            cal: 250
+        }];
+
+        // --- RENDER FUNCTION ---
+        const container = document.getElementById('recipeContainer');
+        recipes.forEach(r => {
+            container.innerHTML += `
+                <div class="col-lg-3 col-md-6">
+                    <div class="recipe-card h-100">
+                        <div class="card-img-container">
+                            <img src="${r.img}" class="w-100 h-100 object-fit-cover" loading="lazy">
+                            <div class="macro-tag">${r.cal} kcal</div>
+                        </div>
+                        <div class="p-4">
+                            <div class="protein-badge mb-2">${r.protein} Protein</div>
+                            <h5 class="fw-bold">${r.name}</h5>
+                            <button class="btn btn-link p-0 text-success text-decoration-none small">
+                                <i class="fas fa-info-circle"></i> Full Macros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // --- CHATBOT LOGIC (API Integration Ready) ---
+        function toggleBot() {
+            const win = document.getElementById('botWindow');
+            win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const content = document.getElementById('chatContent');
+            const userText = input.value.trim();
+
+            if (!userText) return;
+
+            // Add User Message
+            content.innerHTML += `<div class="chat-msg user-msg">${userText}</div>`;
+            input.value = '';
+
+            // --- API Integration Section ---
+            // To integrate a real API (like OpenAI), replace this logic with:
+            // const response = await fetch('YOUR_API_ENDPOINT', { method: 'POST', body: JSON.stringify({prompt: userText}) });
+
+            // Mocking API delay
+            content.innerHTML += `<div class="chat-msg bot-msg" id="typing">Typing...</div>`;
+
+            setTimeout(() => {
+                document.getElementById('typing').remove();
+                let botReply = "As your dietician, I recommend focusing on " + recipes[Math.floor(Math.random() * recipes.length)].name + " to hit your macros today!";
+                if (userText.toLowerCase().includes("protein")) botReply = "For high protein veg, always prioritize Seitan, Soya, and Paneer. This site ensures >20g per meal!";
+
+                content.innerHTML += `<div class="chat-msg bot-msg">${botReply}</div>`;
+                content.scrollTop = content.scrollHeight;
+            }, 1000);
+        }
+
+        // --- EFFECTS ---
+        function triggerConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: {
+                    y: 0.6
+                },
+                colors: ['#00ff88', '#ffffff', '#ff6b00']
+            });
+        }
+    </script>
+</body>
+
+</html>
